@@ -1,0 +1,6 @@
+{
+  "name": "Smart Campus AI Analytics - Faculty Portal",
+  "description": "Real-time pedagogical analytics, predictive student risk monitoring, SIS integration, and AI copilot for grading automation and curriculum design.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -38,6 +38,10 @@ interface FacultyContextType {
   isKeyValid: boolean | null;
   testApiKey: (keyToTest?: string) => Promise<{ valid: boolean; message: string }>;
   
+  // Mobile navigation drawer
+  isMobileNavOpen: boolean;
+  setIsMobileNavOpen: (open: boolean) => void;
+
   // Quick Copilot state
   isCopilotOpen: boolean;
   setIsCopilotOpen: (open: boolean) => void;
@@ -60,6 +64,7 @@ export const FacultyProvider: React.FC<{ children: React.ReactNode }> = ({ child
   const [activeTab, setActiveTab] = useState<'analytics' | 'risk' | 'interventions' | 'grading' | 'curriculum' | 'sis' | 'settings'>('analytics');
   
   const [privacyMode, setPrivacyMode] = useState<boolean>(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState<boolean>(false);
   const [isCopilotOpen, setIsCopilotOpen] = useState<boolean>(false);
   const [copilotInitialPrompt, setCopilotInitialPrompt] = useState<string>('');
 
@@ -264,6 +269,8 @@ export const FacultyProvider: React.FC<{ children: React.ReactNode }> = ({ child
         setApiKey,
         isKeyValid,
         testApiKey,
+        isMobileNavOpen,
+        setIsMobileNavOpen,
         isCopilotOpen,
         setIsCopilotOpen,
         copilotInitialPrompt,

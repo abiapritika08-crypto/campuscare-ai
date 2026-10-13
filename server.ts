@@ -206,12 +206,31 @@ Please provide:
       model: 'gemini-3.8-flash',
       contents: promptText,
       config: {
-        systemInstruction: `You are an automated university grading assistant. Be objective, precise, and supportive. Provide fair rubric-based scores and deeply actionable feedback.`,
+        systemInstruction: `You are an automated university grading assistant. Be objective, precise, and supportive.
+Return ONLY valid JSON matching this schema:
+{
+  "score": number (0 to 100),
+  "letterGrade": string (e.g. "A", "B+", "C"),
+  "criteria": [
+    { "name": string, "score": number, "maxScore": number, "feedback": string }
+  ],
+  "strengths": string[],
+  "weaknesses": string[],
+  "studentFeedback": string,
+  "aiIntegrityScore": number (0 to 100),
+  "aiIntegrityAnalysis": string
+}`,
+        responseMimeType: 'application/json',
         temperature: 0.3,
       }
     });
 
-    res.json({ text: response.text, simulated: false });
+    try {
+      const parsed = JSON.parse(response.text || '{}');
+      res.json({ ...parsed, simulated: false });
+    } catch {
+      res.json({ text: response.text, simulated: false });
+    }
   } catch (error: any) {
     console.error('Grading API error:', error);
     res.status(500).json({ error: error?.message || 'Grading failed' });
@@ -298,12 +317,36 @@ Format the curriculum assistance with:
       model: 'gemini-3.8-flash',
       contents: promptText,
       config: {
-        systemInstruction: 'You are an expert instructional designer and academic curriculum architect for leading research universities.',
+        systemInstruction: `You are an expert instructional designer and academic curriculum architect.
+Return ONLY valid JSON matching this schema:
+{
+  "topic": string,
+  "courseName": string,
+  "curriculumOverview": string,
+  "modules": [
+    { "week": number, "title": string, "cognitiveLevel": string, "readings": string, "activities": string, "deliverable": string }
+  ],
+  "sampleAssessments": [
+    { "question": string, "taxonomyLevel": string, "rubric": string }
+  ],
+  "activeLearningActivity": {
+    "name": string,
+    "duration": string,
+    "description": string,
+    "scaffoldingNote": string
+  }
+}`,
+        responseMimeType: 'application/json',
         temperature: 0.6,
       }
     });
 
-    res.json({ text: response.text, simulated: false });
+    try {
+      const parsed = JSON.parse(response.text || '{}');
+      res.json({ ...parsed, simulated: false });
+    } catch {
+      res.json({ text: response.text, simulated: false });
+    }
   } catch (error: any) {
     console.error('Curriculum API error:', error);
     res.status(500).json({ error: error?.message || 'Curriculum generation failed' });
@@ -353,12 +396,25 @@ Generate:
       model: 'gemini-3.8-flash',
       contents: promptText,
       config: {
-        systemInstruction: 'You are an empathetic, world-class university educator crafting personalized retention interventions for at-risk students.',
+        systemInstruction: `You are an empathetic, world-class university educator crafting personalized retention interventions.
+Return ONLY valid JSON with:
+{
+  "subject": string,
+  "body": string,
+  "officeHoursAgenda": string[],
+  "recommendedResources": string[]
+}`,
+        responseMimeType: 'application/json',
         temperature: 0.5,
       }
     });
 
-    res.json({ text: response.text, simulated: false });
+    try {
+      const parsed = JSON.parse(response.text || '{}');
+      res.json({ ...parsed, simulated: false });
+    } catch {
+      res.json({ text: response.text, simulated: false });
+    }
   } catch (error: any) {
     console.error('Intervention API error:', error);
     res.status(500).json({ error: error?.message || 'Intervention generation failed' });

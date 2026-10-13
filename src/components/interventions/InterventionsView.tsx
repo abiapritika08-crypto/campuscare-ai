@@ -94,12 +94,12 @@ export const InterventionsView: React.FC = () => {
     }
   };
 
-  // Preload initial draft if empty
+  // Preload or refresh draft when target student or tone changes
   useEffect(() => {
-    if (currentTargetStudent && !subject) {
+    if (currentTargetStudent) {
       handleGenerateAIIntervention();
     }
-  }, [currentTargetStudent?.id]);
+  }, [currentTargetStudent?.id, tone]);
 
   const handleDispatch = () => {
     if (!currentTargetStudent) return;

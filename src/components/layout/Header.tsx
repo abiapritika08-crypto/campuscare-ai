@@ -8,7 +8,8 @@ import {
   Key,
   GraduationCap,
   ChevronDown,
-  Layers
+  Layers,
+  Menu
 } from 'lucide-react';
 
 export const Header: React.FC = () => {
@@ -26,12 +27,22 @@ export const Header: React.FC = () => {
     isKeyValid,
     setIsCopilotOpen,
     setActiveTab,
+    isMobileNavOpen,
+    setIsMobileNavOpen,
   } = useFaculty();
 
   return (
     <header className="h-16 border-b border-slate-800/80 bg-slate-950/90 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between sticky top-0 z-30">
       {/* Brand / Section Switcher */}
-      <div className="flex items-center gap-4 sm:gap-6 min-w-0">
+      <div className="flex items-center gap-3 sm:gap-6 min-w-0">
+        <button
+          onClick={() => setIsMobileNavOpen(!isMobileNavOpen)}
+          className="md:hidden p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-900 border border-slate-800"
+          aria-label="Toggle navigation menu"
+        >
+          <Menu className="w-4 h-4" />
+        </button>
+
         <div className="flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 to-indigo-500 flex items-center justify-center text-white shadow-md shadow-indigo-500/20">
             <GraduationCap className="w-5 h-5" />

@@ -13,7 +13,15 @@ import {
 } from 'lucide-react';
 
 export const Sidebar: React.FC = () => {
-  const { activeTab, setActiveTab, activeSection, interventions, submissions } = useFaculty();
+  const {
+    activeTab,
+    setActiveTab,
+    activeSection,
+    interventions,
+    submissions,
+    isMobileNavOpen,
+    setIsMobileNavOpen
+  } = useFaculty();
 
   const criticalCount = activeSection.retentionRiskCount.critical;
   const pendingInterventions = interventions.filter((i) => i.status === 'draft' || i.status === 'pending_review').length;
@@ -68,8 +76,13 @@ export const Sidebar: React.FC = () => {
     },
   ];
 
-  return (
-    <aside className="w-64 border-r border-slate-800/80 bg-slate-950 flex flex-col justify-between shrink-0 select-none">
+  const handleSelectTab = (id: typeof activeTab) => {
+    setActiveTab(id);
+    setIsMobileNavOpen(false);
+  };
+
+  const sidebarContent = (
+    <aside className="w-64 h-full border-r border-slate-800/80 bg-slate-950 flex flex-col justify-between shrink-0 select-none">
       <div className="p-3 space-y-1">
         {/* Course Section Summary Chip */}
         <div className="px-3 py-3 mb-2 rounded-xl bg-slate-900/80 border border-slate-800/80">
@@ -95,7 +108,7 @@ export const Sidebar: React.FC = () => {
             return (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id)}
+                onClick={() => handleSelectTab(item.id)}
                 className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-xs font-medium transition-all ${
                   isActive
                     ? 'bg-indigo-600/15 text-indigo-300 border border-indigo-500/30'
@@ -148,5 +161,27 @@ export const Sidebar: React.FC = () => {
         </div>
       </div>
     </aside>
+  );
+
+  return (
+    <>
+      {/* Desktop fixed sidebar */}
+      <div className="hidden md:block h-full">
+        {sidebarContent}
+      </div>
+
+      {/* Mobile Drawer */}
+      {isMobileNavOpen && (
+        <div className="fixed inset-0 z-40 md:hidden flex">
+          <div
+            className="fixed inset-0 bg-black/60 backdrop-blur-xs transition-opacity"
+            onClick={() => setIsMobileNavOpen(false)}
+          />
+          <div className="relative z-50 flex-1 max-w-xs shadow-2xl">
+            {sidebarContent}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
